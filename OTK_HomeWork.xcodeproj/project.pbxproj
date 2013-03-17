@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		60DA4F5C16F4BC1F00209522 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 60DA4F5B16F4BC1F00209522 /* main.cpp */; };
 		60DA4F5E16F4BC1F00209522 /* OTK_HomeWork.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 60DA4F5D16F4BC1F00209522 /* OTK_HomeWork.1 */; };
-		60DA4F6616F4BC9E00209522 /* Polynom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 60DA4F6516F4BC9E00209522 /* Polynom.cpp */; };
+		60DA4F6616F4BC9E00209522 /* BinPolynomial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 60DA4F6516F4BC9E00209522 /* BinPolynomial.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,8 +29,8 @@
 		60DA4F5816F4BC1F00209522 /* OTK_HomeWork */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OTK_HomeWork; sourceTree = BUILT_PRODUCTS_DIR; };
 		60DA4F5B16F4BC1F00209522 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		60DA4F5D16F4BC1F00209522 /* OTK_HomeWork.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = OTK_HomeWork.1; sourceTree = "<group>"; };
-		60DA4F6416F4BC9900209522 /* Polynom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Polynom.h; sourceTree = "<group>"; };
-		60DA4F6516F4BC9E00209522 /* Polynom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Polynom.cpp; sourceTree = "<group>"; };
+		60DA4F6416F4BC9900209522 /* BinPolynomial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BinPolynomial.h; sourceTree = "<group>"; };
+		60DA4F6516F4BC9E00209522 /* BinPolynomial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BinPolynomial.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,8 +65,8 @@
 			children = (
 				60DA4F5B16F4BC1F00209522 /* main.cpp */,
 				60DA4F5D16F4BC1F00209522 /* OTK_HomeWork.1 */,
-				60DA4F6416F4BC9900209522 /* Polynom.h */,
-				60DA4F6516F4BC9E00209522 /* Polynom.cpp */,
+				60DA4F6416F4BC9900209522 /* BinPolynomial.h */,
+				60DA4F6516F4BC9E00209522 /* BinPolynomial.cpp */,
 			);
 			path = OTK_HomeWork;
 			sourceTree = "<group>";
@@ -123,7 +123,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60DA4F5C16F4BC1F00209522 /* main.cpp in Sources */,
-				60DA4F6616F4BC9E00209522 /* Polynom.cpp in Sources */,
+				60DA4F6616F4BC9E00209522 /* BinPolynomial.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +222,7 @@
 				60DA4F6316F4BC1F00209522 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

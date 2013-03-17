@@ -8,11 +8,42 @@
 
 #include <iostream>
 #include <vector>
-#include "Polynom.h"
+#include "BinPolynomial.h"
 #include <math.h>
+#include <bitset>
+#include <map>
+
+struct CustomComparer {
+    bool operator()(const std::bitset<3>&b1, const std::bitset<3>&b2) const {
+        return b1.to_ulong() < b2.to_ulong();
+    }
+};
 
 int main(int argc, const char * argv[])
 {
+    //array for counting solved errors
+    //generate syndroms table
+    std::bitset<3> mass[7];
+    for (int i=0;i<7;i++){
+        std::bitset<3> bits(i+1);
+        mass[i]=bits;
+    }
+    std::map<std::bitset<3>, int, CustomComparer> syndromsTable = {
+        {mass[0], 0},
+        {mass[1], 1},
+        {mass[2], 3},
+        {mass[3], 2},
+        {mass[4], 6},
+        {mass[5], 4},
+        {mass[6], 5}
+    };
+//    syndromsTable[mass[1]]=1;
+//    syndromsTable[mass[2]]=3;
+//    syndromsTable[mass[3]]=2;
+//    syndromsTable[mass[4]]=6;
+//    syndromsTable[mass[5]]=4;
+//    syndromsTable[mass[6]]=5;
+    //
     std::cout << "Hello, World!\nThis application is created by Anisimov Nikita (c) 2013\n";
     std::cout << "Set input vector size: ";
     int vecSize=0;
@@ -38,14 +69,14 @@ int main(int argc, const char * argv[])
     for (std::vector<int>::iterator it=sourceVec.begin(); it!=sourceVec.end(); ++it)
         std::cout << *it;
     std::cout << "\nWill encode it now...\n";
-    Polynom sourcePoly(sourceVec);
+    BinPolynomial sourcePoly(sourceVec);
     sourcePoly.setCoutZeroKoefs(0);
     std::vector<int> multiVec(n-vecSize+1);
     multiVec[multiVec.size() - (n-vecSize) - 1]=1;
-    Polynom multiPoly(multiVec);
+    BinPolynomial multiPoly(multiVec);
     multiPoly.setCoutZeroKoefs(0);
     std::cout << "Multiplying: (" << sourcePoly << ") * (" << multiPoly << ") = ";
-    Polynom multiResult;
+    BinPolynomial multiResult;
     multiResult=sourcePoly*multiPoly;
     multiResult.setCoutZeroKoefs(0);
     std::cout << multiResult << "\nDividing it by g(x) = ";
@@ -72,12 +103,12 @@ int main(int argc, const char * argv[])
             return 0;
             break;
     }
-    Polynom gPoly(gVec);
+    BinPolynomial gPoly(gVec);
     std::cout << gPoly << "\n";
-    Polynom divisionResult;
+    BinPolynomial divisionResult;
     divisionResult=multiResult/gPoly;
     divisionResult.setCoutZeroKoefs(0);
-    Polynom moduloResult;
+    BinPolynomial moduloResult;
     moduloResult=multiResult%gPoly;
     moduloResult.setCoutZeroKoefs(1);
     std::cout << "Division result is: " << divisionResult << "\n";
@@ -92,11 +123,63 @@ int main(int argc, const char * argv[])
     for (std::vector<int>::iterator it=concated.begin();it!=concated.end();++it)
         std::cout << *it;
     std::cout << "\n####\n";
-    std::cout << "Totally there can be " << powf(2, n) << " error vectors.";
-    std::cout << "Generating error vectors now...\n";
-    for (int i=0;i<powf(2,n);i++){
+    std::cout << "Totally there can be " << powf(2, n)-1 << " error vectors(with out 0-vector).";
+    std::cout << "Generating error vectors now...\n####\n";
+    for (int i=1;i<powf(2,n);i++){
+        std::vector<int> sVec(concated);
         std::vector<int> eVec(7);
-        
+        std::bitset<7> bits(i);
+        unsigned short int multiplicity=0;
+        for (int i=0;i<eVec.size();i++){
+            eVec[i]=bits[i];
+            if (eVec[i]) multiplicity++;
+        }
+        std::cout << "##\nError vector = ";
+        for (std::vector<int>::iterator it=eVec.begin();it!=eVec.end();++it)
+            std::cout << *it;
+        std::cout << "\nError multiplicity = " << multiplicity;
+        std::cout << "\nReceived vector = ";
+        for (int i=0;i<sVec.size();i++){
+            sVec[i]=(sVec[i]+eVec[i])%2;
+            std::cout << sVec[i];
+        }
+        std::cout << "\nDecoding - again modulo of division by g(x):\n";
+        BinPolynomial rPoly(sVec);
+        BinPolynomial modulo;
+        modulo=rPoly%gPoly;
+        modulo.setCoutZeroKoefs(0);
+        std::cout << "Error syndrom = " << modulo;
+        if (modulo.getKoefVec().size()==0){
+            std::cout << "\nError syndrom is empty, so algorithm says there is no error in received message\n##\n";
+            break;
+        }
+        if (multiplicity>1){
+            int weight=100;
+            int i=1;
+            BinPolynomial buffer;
+            while (weight>multiplicity){
+                BinPolynomial modPoly=modulo;
+                BinPolynomial syndPoly;
+                std::vector<int> syndVec(i);
+                syndVec[i]=1;
+                BinPolynomial mulPoly(syndVec);
+                syndPoly=mulPoly*modPoly;
+                syndPoly=syndPoly%gPoly;
+                weight=(int)syndPoly.getKoefVec().size();
+                buffer=syndPoly;
+                i+=1;
+            }
+            std::cout << i << " new syndrom vector iterations passed.\nError syndrom = " << buffer;
+            break;
+        }
+        std::bitset<3> checkBits;
+        for (int i=0;i<modulo.getKoefVec().size();i++) checkBits[i]=modulo.getKoefVec()[modulo.getKoefVec().size() - 1 - i];
+        int errorInDegree=syndromsTable[checkBits];
+        std::cout << "\nError in bit #" << errorInDegree << " (BinPolynomialial term with degree " << errorInDegree << ")";
+        std::cout << "\nRecovered vector: ";
+        sVec[errorInDegree]=!sVec[errorInDegree];
+        for (std::vector<int>::iterator it=sVec.begin();it!=sVec.end();++it) std::cout << *it;
+        std::cout << "\n##\n";
     }
     return 0;
 }

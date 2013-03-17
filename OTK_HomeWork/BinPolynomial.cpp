@@ -1,40 +1,40 @@
 //
-//  Polynom.cpp
+//  BinPolynomial.cpp
 //  OTK_HomeWork
 //
 //  Created by Nikita Anisimov on 3/16/13.
 //  Copyright (c) 2013 Nikita Anisimov. All rights reserved.
 //
 
-#include "Polynom.h"
+#include "BinPolynomial.h"
 
-Polynom::Polynom(){
+BinPolynomial::BinPolynomial(){
     this->coutZeroes=1;
 }
 
-Polynom::Polynom(std::vector<int> koefs){
+BinPolynomial::BinPolynomial(std::vector<int> koefs){
     this->koefVec=koefs;
     this->coutZeroes=1;
 }
 
-Polynom::Polynom(Polynom &copy){
+BinPolynomial::BinPolynomial(BinPolynomial &copy){
     this->koefVec=copy.koefVec;
     this->coutZeroes=copy.coutZeroes;
 }
 
-Polynom::~Polynom(){
+BinPolynomial::~BinPolynomial(){
     
 }
 
-std::vector<int> Polynom::getKoefVec(){
+std::vector<int> BinPolynomial::getKoefVec(){
     return this->koefVec;
 }
 
-void Polynom::setCoutZeroKoefs(bool zeroes){
+void BinPolynomial::setCoutZeroKoefs(bool zeroes){
     this->coutZeroes=zeroes;
 }
 
-std::ostream &operator<<(std::ostream& outstream, const Polynom &poly){
+std::ostream &operator<<(std::ostream& outstream, const BinPolynomial &poly){
     long polyKoef;
     for (polyKoef=poly.koefVec.size()-1;polyKoef>=0;polyKoef--){
         if (!poly.coutZeroes&&!poly.koefVec[poly.koefVec.size()-1-polyKoef])
@@ -46,7 +46,7 @@ std::ostream &operator<<(std::ostream& outstream, const Polynom &poly){
     return outstream;
 }
 
-Polynom Polynom::operator*(std::vector<int>&otherVec){
+BinPolynomial BinPolynomial::operator*(std::vector<int>&otherVec){
     std::vector<int> thisVec=this->koefVec;
     std::vector<int> resultVec(thisVec.size()-1+otherVec.size());
     
@@ -66,11 +66,11 @@ Polynom Polynom::operator*(std::vector<int>&otherVec){
         }
     }
     
-    Polynom resPoly(resultVec);
+    BinPolynomial resPoly(resultVec);
     return resPoly;
 }
 
-Polynom Polynom::operator*(Polynom&poly){
+BinPolynomial BinPolynomial::operator*(BinPolynomial&poly){
     std::vector<int> thisVec=this->koefVec;
     std::vector<int> otherVec=poly.koefVec;
     std::vector<int> resultVec(thisVec.size()-1+otherVec.size());
@@ -91,11 +91,11 @@ Polynom Polynom::operator*(Polynom&poly){
         }
     }
     
-    Polynom resPoly(resultVec);
+    BinPolynomial resPoly(resultVec);
     return resPoly;
 }
 
-Polynom Polynom::operator/(Polynom&poly){
+BinPolynomial BinPolynomial::operator/(BinPolynomial&poly){
     std::vector<int> tVec=this->koefVec;
     std::vector<int> oVec=poly.koefVec;
     std::reverse(tVec.begin(), tVec.end());
@@ -140,11 +140,11 @@ Polynom Polynom::operator/(Polynom&poly){
 #endif
     }
     std::reverse(result.begin(), result.end());
-    Polynom res(result);
+    BinPolynomial res(result);
     return res;
 }
 
-Polynom Polynom::operator%(Polynom&poly){
+BinPolynomial BinPolynomial::operator%(BinPolynomial&poly){
     std::vector<int> tVec=this->koefVec;
     std::vector<int> oVec=poly.koefVec;
     std::reverse(tVec.begin(), tVec.end());
@@ -171,7 +171,7 @@ Polynom Polynom::operator%(Polynom&poly){
             else buffer2[i+delta]=0;
         }
 #ifdef DEBUG_OTK
-        std::cout << "Buffer 1(Delemited) = " << buffer1 << "\n";
+        std::cout << "Buffer 1(Delimited) = " << buffer1 << "\n";
         std::cout << "Buffer 2(Delimiter) = " << buffer2 << "\n";
 #endif
         for (int i=0;i<tVec.size();i++) buffer3[i]=(buffer1[i] + buffer2[i]) % 2;
@@ -189,7 +189,7 @@ Polynom Polynom::operator%(Polynom&poly){
 #endif
     }
     std::reverse(buffer3.begin(), buffer3.end());
-    Polynom modulo(buffer3);
+    BinPolynomial modulo(buffer3);
     return modulo;
 }
 
@@ -207,7 +207,7 @@ void optiSizeVector(std::vector<int>*vec){
 #endif
 }
 
-Polynom Polynom::operator+(Polynom&poly){
+BinPolynomial BinPolynomial::operator+(BinPolynomial&poly){
 #ifdef DEBUG_OTK
     assert(false);
 #endif
